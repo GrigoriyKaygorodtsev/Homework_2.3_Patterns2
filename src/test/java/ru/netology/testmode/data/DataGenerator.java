@@ -11,7 +11,9 @@ import java.util.Locale;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.junit.jupiter.api.BeforeAll;
+import org.openqa.selenium.devtools.v116.audits.model.FederatedAuthUserInfoRequestIssueDetails;
 
 import static io.restassured.RestAssured.given;
 
@@ -28,46 +30,29 @@ public class DataGenerator {
     private DataGenerator() {
     }
 
-    //private static void sendRequest(RegistrationDto user) {
-    //    @Data
-    //    @RequiredArgsConstructor
-    //    public class UserInfo {
-    //        private final String login;
-    //        private final String password;
-    //        private final String status;
-    //    }
 
-    //}
 private static RegistrationDto sendRequest(RegistrationDto user) {
-        given() // "дано"
-                .spec(requestSpec) // указываем, какую спецификацию используем
-                .body(new RegistrationDto("vasya", "password", "active")) // передаём в теле объект, который будет преобразован в JSON
-                .when() // "когда"
-                .post("/api/system/users") // на какой путь относительно BaseUri отправляем запрос
-                .then() // "тогда ожидаем"
+        given()
+                .spec(requestSpec)
+                .body(user)
+                .when()
+                .post("/api/system/users")
+                .then()
                 .statusCode(200);
         return user;
     }
 
     public static String getRandomLogin() {
-        Faker faker = new Faker();
+        //Faker FAKER = new Faker();
 
         return FAKER.name().username();
     }
 
     public static String getRandomPassword() {
-        Faker faker = new Faker();
+        //Faker faker = new Faker();
 
         return FAKER.internet().password();
     }
-   // public static String generateStatus(boolean status) {
-   //     if (status) {
-   //         return "active";
-   //     } else {
-   //         return "blocked";
-   //     }
-   // }
-
     public static class Registration {
         private Registration() {
         }
